@@ -1,0 +1,203 @@
+---
+title: "HW2: Health Savings Experiments"
+date: "07 September 2022"
+output:
+  pdf_document 
+
+---
+
+To understand why those who are low income are constrained in their ability to save 
+for investments in preventative health, researchers designed a field 
+experiment in rural Kenya in which they randomly varied access to four 
+innovative saving technologies. By observing the impact of these various 
+technologies on asset accumulation, and by examining which types of people 
+benefit most from them, the researchers were able to identify key barriers 
+to saving.
+
+They worked with 113 ROSCAs (Rotating Savings and Credit Associations). A ROSCA 
+is a group of individuals who come together and make regular cyclical 
+contributions to a fund (called the “pot”), which is then given as a lump sum 
+to one member in each cycle. In their experiment, the researchers randomly 
+assigned 113 ROSCAs to one of the five study arms. In this exercise, we will 
+focus on three study arms (one control and two treatment arms). The data file, 
+`rosca.csv` is extracted from their original data, excluding individuals who 
+have received multiple treatments for the sake of simplicity.
+
+Individuals in all study arms were encouraged to save for health and were asked 
+to set a health goal for themselves at the beginning of the study.  In the first 
+treatment group (*Safe Box*), respondents were given a box locked with a 
+padlock, and the key to the padlock was provided to the participants. They were 
+asked to record what health product they were saving for and its cost. This 
+treatment is designed to estimate the effect of having a safe and designated
+storage technology for preventative health savings.  
+
+In the second treatment group (*Locked Box*), respondents were given a locked 
+box, but not the key to the padlock. The respondents were instructed to call the 
+program officer once they had reached their saving goal, and the program officer 
+would then meet the participant and open the *Locked Box* at the shop where the 
+product is purchased. Compared to the safe box, the locked box offered stronger 
+commitment through earmarking (the money saved could only be used for the 
+specified purpose selected by the participant) but less control of funds by the participant. 
+
+Participants were interviewed again 6 months and 12 months later. In this HW, 
+our outcome of interest is the amount (in Kenyan shillings) spent on preventative 
+health products after 12 months.
+
+Descriptions of the relevant variables in the data file `rosca.csv` are:
+
+ Name                             Description
+ -------------------------------------------------------------
+ `bg_female`                      `1` if female, and `0` otherwise. This is a pre-treatment variable.
+ `bg_married`                     `1` if married, and `0` otherwise. This is a pre-treatment variable.
+ `bg_b1_age`                      Age at baseline. This is a pre-treatment variable.
+ `encouragement`                  `1` if participant received encouragement only (control group), and    									                   `0` otherwise 
+ `safe_box`                       `1` if participant received safe box treatment, and `0` otherwise
+ `locked_box`                     `1` if participant received lock box treatment, and `0` otherwise
+ `fol2_amtinvest`                 Amount invested in health products at time of the second follow up         
+ `has_followup2`                  `1` if participant appears in second followup (after 12 months), and 									                       `0` otherwise
+ 
+
+## Question 0
+Run the following the code chunk below to load the data set and create a new variable `treatment` that takes the value `control` if receiving only encouragement, `safebox` if receiving a safe box,  and `lockbox` if receiving a locked box. We then designate that R should treat this new variable as a factor variable.
+
+```{r}
+library(tidyverse)
+library(readr)
+rosca <- read_csv("data/rosca.csv")
+
+rosca <- rosca %>%
+  mutate(treatment = case_when(
+    encouragement == 1 ~ 'control',
+    safe_box == 1 ~ 'safebox',
+    locked_box == 1 ~ 'lockbox'
+  ))
+
+rosca$treatment <- as.factor(rosca$treatment)
+```
+
+
+\newpage
+
+## Question 1 (10 points)
+
+What does a row in the data set correspond to? How many individuals are in the control group? How many individuals are in each of the treatment arms? Use a table to show the counts. What proportion of the study participants are in each treatment arm and the control group?
+
+For the remainder of this question, consider just the Locked Box treatment relative to the Encouragement Only alternative:
+What is the specific causal question the researchers aimed to answer?  
+What are the potential outcomes? 
+What is the hypothesized treatment effect?
+For the Locked Box intervention group, what is their average missing counterfactual? 
+How do your recommend  estimating it? 
+
+
+## Answer 1 Code
+```{r}
+
+
+
+
+```
+
+## Answer 1 Text
+
+
+
+\newpage
+
+## Question 2 (6 points)
+
+What are the drop-out rates (those for whom 12 month outcomes are missing, you may use the `has_followup2` variable) across the treatment and control conditions? *Hint: you can add, subtract, multiply, and divide tables in R or use Two-Way Tables*
+Does the nature of either of the treatments (Safebox or Lockbox) suggest to you we should expect drop-out to be higher or lower in one group? What impact might drop-out have on the balance on baseline covariates we expect to obtain with randomization?  
+Subset (or filter) the data (we suggest giving the subset data a new object name) so that it contains only participants who were interviewed at 12 months during the second followup.  We will use this subset for the rest of this HW which means it is what is called a complete case analysis. How many participants are left in each group (control group and two treatment arms) of this subset?  
+
+## Answer 2 Code
+```{r}
+
+
+
+
+```
+
+## Answer 2 Text
+
+
+
+\newpage
+
+## Question 3 (8 points)
+
+Does receiving a Safe box or Lockbox increase the average amount invested in health products relative to encouragement only? We focus on the outcome measured 12 months from baseline during the second follow-up `fol2_amtinvest`. First, describe the distribution of this outcome over all study participants based on the results of the summary() and hist() commands. 
+Then find the average amount invested (in Kenyan shillings) in health products across the two treatment groups and the control condition. 
+Then calculate the differences in the the mean of amounts invested in health products between each of the treatment arms and the control group. Briefly interpret the results. 
+State any limitation of using averages (rather than a different summary statistic) to estimate impacts given what you know about the distribution of the outcome measure.
+
+## Answer 3 Code
+
+```{r}
+
+
+
+
+```
+
+
+## Answer 3 Text
+
+
+\newpage
+
+## Question 4 (9 points)
+
+Examine the distribution of the pre-treatment (or baseline) variables - gender (`bg_female`), age (`bg_b1_age`) and marital status (`bg_married`) across the three groups of interest (two treatmen groups and control group). Please provide calculations and interpretations for each of the three pre-treatment variables separately. Are participants who stayed in the study in the two treatment groups different from those in the control group with regard to each of these three variables? 
+
+What does the result of this analysis suggest about whether the control group is providing an unbiased estimate of the average MCF for the two treatment groups?  Also, if you think that this estimate might be biased, for one of the baseline covariates, state whether you hypothesize this would lead to over- or under-estimates of the treatment effects in this case and why.
+
+## Answer 4 Code
+
+```{r}
+# gender
+
+
+
+
+```
+
+```{r}
+# age
+
+
+
+
+```
+
+```{r}
+# marital status
+
+
+
+
+```
+
+## Answer 4 Text
+
+\newpage
+
+## Question 5 (8 points)
+
+Does receiving a safe box or a locked box have different effects on the investment of *married* versus *unmarried women*? Compare the mean investment in health products among married women across the three treatment conditions. Then compare the mean investment in health products among unmarried women in the three treatment conditions. Briefly interpret both sets of results and comment on any differences for the two groups of interest.  [We recommend that you filter on gender and marital status to obtain two data sets, one with married women the other with unmarried women.]
+
+How does this analysis address any potential bias issues discussed in Question 4? 
+
+## Answer 5 Code
+
+```{r}
+
+# Married women
+
+
+# Unmarried women
+
+
+```
+
+## Answer 5 Text
